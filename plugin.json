@@ -1,0 +1,10 @@
+{
+  "name": "bean-descale",
+  "version": "1.0.0",
+  "description": "System Resilience, Day 2 SRE, and Codebase Modernization: Chaos engineering, vulnerability scanning, security remediation, and app assessment.",
+  "author": {
+    "name": "sapientcoffee"
+  },
+  "repository": "https://github.com/sapientcoffee/bean-descale",
+  "license": "Apache-2.0"
+}
