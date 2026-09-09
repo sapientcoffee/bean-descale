@@ -1,14 +1,13 @@
 # 🧼 Bean-Descale
 
-> System Resilience, Day 2 SRE, and Codebase Modernization: Chaos engineering, vulnerability scanning, security remediation, and app assessment.
+> System Resilience, Day 2 SRE, and Security Operations: Chaos engineering, vulnerability scanning, and security remediation.
 
 ## 🚀 Capabilities
 
 - **Chaos Mitigation (`chaos-mitigation`)**: Detects and mitigates active chaos events using runbooks.
-- **Modernization Assessment (`assess`)**: Comprehensive legacy code scans and cloud migration cost estimates.
-- **Legacy Rewrite Orchestration (`rewrite`)**: Systematic migration from legacy architectures to modern patterns.
 - **Vulnerability Scanner (`@vulnerability-scanner`)**: Scans codebases for OWASP Top 10 risks.
 - **Security Auditor (`@security-auditor`) & Remediator (`@security-remediator`)**: Structural vulnerability planning and automated patching.
+- **Local Dev & Deployment (`deploy-app`, `dev`)**: Automates stack detection, local deployment, and environment hosting.
 
 ## 📦 Installation
 

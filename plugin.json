@@ -1,7 +1,7 @@
 {
   "name": "bean-descale",
   "version": "1.0.0",
-  "description": "System Resilience, Day 2 SRE, and Codebase Modernization: Chaos engineering, vulnerability scanning, security remediation, and app assessment.",
+  "description": "System Resilience, Day 2 SRE, and Security Operations: Chaos engineering, vulnerability scanning, security remediation, and local stack hosting.",
   "author": {
     "name": "sapientcoffee"
   },
