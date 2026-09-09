@@ -43,7 +43,9 @@ In software engineering, running systems accumulate operational limescale: activ
 | :--- | :---: | :--- |
 | **`chaos-mitigation`** | Skill | Detects, analyzes, and mitigates active chaos events in microservices (e.g., latency spikes, failure injection) using log forensics and predefined operational runbooks. |
 | **`@vulnerability-scanner`** | Agent | Performs non-destructive static analysis and AST pattern matching to detect OWASP Top 10 vulnerabilities and hardcoded secrets. |
-| **`@security-auditor`** | Agent | Ingests vulnerability findings, evaluates threat vectors, and synthesizes a structured security remediation specification. |
+| **`@killchain-analyzer`** | Agent | Ingests vulnerability findings, synthesizes end-to-end exploit chains (Reconnaissance -> Weaponization -> Lateral Movement), writes `docs/security/attack_tree.md`, and identifies prioritized defense chokepoints. |
+| **`adversarial-proofing`** | Skill | Enforces test-driven security remediation: verifies exploit test FAILS on unpatched code before applying surgical fix, then verifies it PASSES. |
+| **`harness-immunizer`** | Skill | Extracts failure root causes upon repeated remediation retries (>2) and writes permanent architectural gotcha rules into `rules/gotchas/`. |
 | **`@security-remediator`** | Agent | Executes verified, surgical security patches and updates dependency constraints without introducing functional regressions. |
 | **`deploy-app` & `dev`** | Skills | Automatically detects tech stacks, configures local dependencies, and hosts services locally for operational verification. |
 
@@ -65,12 +67,16 @@ flowchart TD
         VerifyRecovery["Verify Latency & Error Rate Restored"]
     end
 
-    subgraph SecurityTrack["🛡️ Security & Vulnerability Remediation"]
+    subgraph SecurityTrack["🛡️ Security & Killchain Remediation"]
         VulnScanner["@vulnerability-scanner Subagent<br/>(OWASP Top 10 Static AST Scan)"]
         VulnerabilitiesFound{"Vulnerabilities Detected?"}
-        Auditor["@security-auditor Subagent<br/>(Threat Modeling & Fix Strategy)"]
+        KillChain["@killchain-analyzer Subagent<br/>(Synthesize Attack Tree & Chokepoints)"]
+        AttackTree["Emit: docs/security/attack_tree.md"]
+        PreFail["adversarial-proofing (Verify Exploit Test FAILS)"]
         Remediator["@security-remediator Subagent<br/>(Surgical Patch Implementation)"]
+        PostPass["adversarial-proofing (Verify Exploit Test PASSES)"]
         RemediationScope{"Scope of Fix"}
+        HarnessPatch["harness-immunizer Skill<br/>(Self-Healing Gotcha Patch on >2 Retries)"]
     end
 
     subgraph LocalHosting["🧪 Operational Verification & Hosting"]
@@ -92,10 +98,14 @@ flowchart TD
 
     ScheduledAudit --> VulnScanner
     VulnScanner --> VulnerabilitiesFound
-    VulnerabilitiesFound -->|Yes| Auditor
+    VulnerabilitiesFound -->|Yes| KillChain
     VulnerabilitiesFound -->|No| DirectCommit
-    Auditor --> Remediator
-    Remediator --> RemediationScope
+    KillChain --> AttackTree --> PreFail
+    PreFail --> Remediator
+    Remediator --> PostPass
+    PostPass -->|Retry <= 2| Remediator
+    PostPass -->|Retry > 2| HarnessPatch --> Remediator
+    PostPass -->|Verified Pass| RemediationScope
 
     RemediationScope -->|Surgical Bugfix| StackDetect
     StackDetect --> DevServer --> RegressionTest
