@@ -1,10 +1,18 @@
+<p align="center">
+  <img src="assets/banner.png" alt="Bean-Descale Banner" width="100%" />
+</p>
+
 # 🧼 Bean-Descale
 
-> System Resilience, Day 2 SRE, Chaos Mitigation, and Security Remediation Suite for Antigravity pipelines.
+> **System Resilience, Day 2 SRE, Chaos Mitigation, and Security Remediation Suite for Antigravity pipelines.**
 
 ---
 
-## ☕ Why "The Descaler"? (The Metaphor)
+## ☕ Why "The Descaler"? (The Metaphor Explained)
+
+<p align="center">
+  <img src="assets/sketch.png" alt="Bean-Descale Fun Sketch" width="480px" />
+</p>
 
 In any commercial espresso machine, water heated under high pressure inevitably leaves behind calcium carbonate and mineral buildup (limescale). If left untreated, scale blocks heating elements, clogs group heads, causes solenoid valves to stick, and degrades brew quality until the machine fails. Descaling is the vital maintenance routine that cleans the pipes, dissolves scale, and restores full operational pressure.
 
@@ -41,20 +49,60 @@ In software engineering, running systems accumulate operational limescale: activ
 
 ---
 
-## 🔄 Incident & Remediation Workflow
+## 🔄 Detailed Incident Mitigation & Security Workflow
 
 ```mermaid
-graph TD
-    Alert([Active Production Alert / Chaos Event]) --> Triage["chaos-mitigation<br/>(Log Analysis & Runbooks)"]
-    Triage --> Mitigate["Apply Mitigation Patch"]
-    Mitigate --> Verify["dev / deploy-app<br/>(Local Verification)"]
-    
-    VulnScan([Scheduled Security Audit]) --> Scanner["@vulnerability-scanner"]
-    Scanner --> Auditor["@security-auditor<br/>(Remediation Plan)"]
-    Auditor --> Remediator["@security-remediator<br/>(Surgical Patch)"]
-    Remediator --> Handoff{Remediation Scope}
-    Handoff -->|Direct Patch| Fixed[(Secured Service)]
-    Handoff -->|Large Architectural Rewrite| Brewer["Export to bean-brewer"]
+flowchart TD
+    subgraph Triggers["🚨 Operational Triggers"]
+        ChaosAlert["Active Production Chaos Alert<br/>(Latency spike, HTTP 500s, pod crash)"]
+        ScheduledAudit["Scheduled Security Compliance Scan"]
+    end
+
+    subgraph ChaosMitigation["💥 Chaos Mitigation Protocol (chaos-mitigation)"]
+        IngestLogs["Ingest Real-Time Service Logs"]
+        MatchRunbook["Match Symptom to Runbook Library"]
+        ExecuteAction["Execute Mitigation Steps<br/>(Circuit breaker trip, route reroute, scale out)"]
+        VerifyRecovery["Verify Latency & Error Rate Restored"]
+    end
+
+    subgraph SecurityTrack["🛡️ Security & Vulnerability Remediation"]
+        VulnScanner["@vulnerability-scanner Subagent<br/>(OWASP Top 10 Static AST Scan)"]
+        VulnerabilitiesFound{"Vulnerabilities Detected?"}
+        Auditor["@security-auditor Subagent<br/>(Threat Modeling & Fix Strategy)"]
+        Remediator["@security-remediator Subagent<br/>(Surgical Patch Implementation)"]
+        RemediationScope{"Scope of Fix"}
+    end
+
+    subgraph LocalHosting["🧪 Operational Verification & Hosting"]
+        StackDetect["deploy-app (Auto-Detect Stack & Dependencies)"]
+        DevServer["dev (Host Local Development & Staging Services)"]
+        RegressionTest{"Regressions Introduced?"}
+    end
+
+    subgraph Resolution["✅ Operational Resolution"]
+        DirectCommit["Direct Patch Applied & Confirmed"]
+        HandoffBrewer["Export Architectural Refactor<br/>(Emit 02_PRD.md to bean-brewer)"]
+    end
+
+    ChaosAlert --> IngestLogs
+    IngestLogs --> MatchRunbook
+    MatchRunbook --> ExecuteAction
+    ExecuteAction --> VerifyRecovery
+    VerifyRecovery --> DirectCommit
+
+    ScheduledAudit --> VulnScanner
+    VulnScanner --> VulnerabilitiesFound
+    VulnerabilitiesFound -->|Yes| Auditor
+    VulnerabilitiesFound -->|No| DirectCommit
+    Auditor --> Remediator
+    Remediator --> RemediationScope
+
+    RemediationScope -->|Surgical Bugfix| StackDetect
+    StackDetect --> DevServer --> RegressionTest
+    RegressionTest -->|Passed| DirectCommit
+    RegressionTest -->|Needs Rework| Remediator
+
+    RemediationScope -->|Deep Architectural Modernization| HandoffBrewer
 ```
 
 ---
