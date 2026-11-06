@@ -2,13 +2,13 @@
 name: killchain-analyzer
 description: Adversarial exploit chain analyzer. Ingests raw vulnerability scan logs, synthesizes end-to-end attack trees (Reconnaissance -> Weaponization -> Lateral Movement), and writes prioritized defense chokepoints into docs/security/attack_tree.md.
 kind: local
+subagent: true
+mainAgent: false
+model: inherit
 tools:
   - read_file
   - write_file
-  - run_shell_command
-model: gemini-3.1-pro-preview
-temperature: 0.1
-max_turns: 20
+  - run_command
 ---
 
 <!--

@@ -9,7 +9,6 @@ TARGET_DIR="${HOME}/.gemini/config/plugins/bean-descale"
 echo "🧼 Installing bean-descale plugin..."
 mkdir -p "${TARGET_DIR}"
 cp -r "${SCRIPT_DIR}/plugin.json" "${TARGET_DIR}/"
-cp -r "${SCRIPT_DIR}/gemini-extension.json" "${TARGET_DIR}/" 2>/dev/null || true
 cp -r "${SCRIPT_DIR}/bean-descale.md" "${TARGET_DIR}/" 2>/dev/null || true
 cp -r "${SCRIPT_DIR}/skills" "${TARGET_DIR}/"
 cp -r "${SCRIPT_DIR}/agents" "${TARGET_DIR}/" 2>/dev/null || true

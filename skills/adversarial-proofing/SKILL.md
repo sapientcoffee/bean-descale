@@ -29,9 +29,9 @@ You are executing the **Adversarial Proofing** skill. This skill guarantees that
 Direct the `@security-remediator` subagent to write a targeted regression test reproducing the exploit inside `tests/security/` (e.g. `tests/security/test_cve_replay.py`).
 
 ### Step 2: Pre-Patch Failure Verification
-Execute the pre-patch verification command using the CLI runner:
+Execute the pre-patch verification command using the colocated CLI runner:
 ```bash
-python3 scripts/adversarial_proof.py verify-fail --test-cmd "pytest tests/security/test_cve_replay.py"
+python3 skills/adversarial-proofing/scripts/adversarial_proof.py verify-fail --test-cmd "pytest tests/security/test_cve_replay.py"
 ```
 - **Invariant**: The test **MUST FAIL** on unpatched code (exit code != 0). This confirms that the test accurately captures the vulnerability.
 - If the test passes prior to patching, it is invalid and must be rewritten.
@@ -42,7 +42,7 @@ Direct `@security-remediator` to apply the minimal, surgical security patch to t
 ### Step 4: Post-Patch Success Verification
 Execute the post-patch verification command:
 ```bash
-python3 scripts/adversarial_proof.py verify-pass --test-cmd "pytest tests/security/test_cve_replay.py"
+python3 skills/adversarial-proofing/scripts/adversarial_proof.py verify-pass --test-cmd "pytest tests/security/test_cve_replay.py"
 ```
 - **Invariant**: The test **MUST PASS** cleanly (exit code 0).
 - If the test fails, remediation is incomplete and the patch must be revised.
@@ -50,6 +50,6 @@ python3 scripts/adversarial_proof.py verify-pass --test-cmd "pytest tests/securi
 ### Step 5: Check Proof Status
 Verify overall proof log status:
 ```bash
-python3 scripts/adversarial_proof.py status
+python3 skills/adversarial-proofing/scripts/adversarial_proof.py status
 ```
 Logs are preserved in `.security-audit/adversarial_proof.json`.

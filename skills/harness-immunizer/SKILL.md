@@ -1,6 +1,6 @@
 ---
 name: harness-immunizer
-description: Velocity Harness Patch self-healing mechanism. Extracts failure root causes upon repeated remediation retries (>2) and permanently writes architectural gotcha rules into rules/gotchas/.
+description: Velocity Harness Patch self-healing mechanism. Extracts failure root causes upon repeated remediation retries (>2) and permanently writes architectural gotcha rules into the target workspace's .agents/rules/gotchas/<slug>.md.
 ---
 
 <!--
@@ -21,21 +21,22 @@ limitations under the License.
 
 # 🛡️ Skill: Harness Immunizer (Velocity Harness Patch)
 
-You are executing the **Harness Immunizer** skill. This skill forms the swarm's self-healing immune system. When an incident remediation failure loop repeats (>2 failed retries during exploit testing and patching), this skill isolates the underlying root cause and generates a permanent architectural constraint in `rules/gotchas/<slug>.md`.
+You are executing the **Harness Immunizer** skill. This skill forms the swarm's self-healing immune system. When an incident remediation failure loop repeats (>2 failed retries during exploit testing and patching), this skill isolates the underlying root cause and generates a permanent architectural constraint in the target workspace's `.agents/rules/gotchas/<slug>.md` (configurable via `--output-dir`, defaulting to `.agents/rules/gotchas`).
 
 ## When to Trigger
 - Any incident remediation or security patch attempt that fails more than twice in succession.
 - Recurring systemic errors in security harness environments.
 
 ## CLI Usage
-Execute the script to record a new gotcha rule:
+Execute the script to record a new gotcha rule in the target workspace without mutating the plugin's own directory:
 ```bash
-python3 scripts/immunize_harness.py \
+python3 skills/harness-immunizer/scripts/immunize_harness.py \
   --issue-title "Token Validation Clock Skew" \
   --root-cause "JWT validation failed intermittently due to unsynchronized container clocks without leeway." \
   --remediation "Configure JWT verification with explicit 60-second clock skew leeway on all auth endpoints." \
-  --rule-slug "jwt-clock-skew-leeway"
+  --rule-slug "jwt-clock-skew-leeway" \
+  --output-dir ".agents/rules/gotchas"
 ```
 
 ## Systemic Effect
-Subsequent runs by any agent across the repository will ingest `rules/gotchas/` during context initialization, preventing recurrent architectural failure loops.
+Subsequent runs by any agent across the target workspace will ingest `.agents/rules/gotchas/` during context initialization, preventing recurrent architectural failure loops.
