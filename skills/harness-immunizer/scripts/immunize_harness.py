@@ -16,7 +16,8 @@
 """
 Harness Immunizer Tool (Velocity Harness Patch).
 Extracts root causes from repeated implementation/remediation failures (>2 retries)
-and generates permanent architectural gotcha rules under rules/gotchas/<slug>.md.
+and generates permanent architectural gotcha rules under the target workspace's
+.agents/rules/gotchas/<slug>.md (configurable via --output-dir).
 """
 
 import argparse
@@ -80,7 +81,8 @@ def main():
     parser.add_argument("--root-cause", required=True, help="Detailed explanation of the failure root cause")
     parser.add_argument("--remediation", default="Enforce proper lifecycle management, resource cleanup, and verification assertions.", help="Mandatory architectural constraint or fix pattern")
     parser.add_argument("--rule-slug", default=None, help="Optional slug for filename (derived from title if omitted)")
-    parser.add_argument("--repo-root", default=".", help="Root directory of the repository")
+    parser.add_argument("--output-dir", default=".agents/rules/gotchas", help="Target directory for gotcha rules (default: .agents/rules/gotchas)")
+    parser.add_argument("--repo-root", default=None, help="Optional workspace root directory prefix")
 
     args = parser.parse_args()
 
@@ -91,8 +93,11 @@ def main():
         filename = slug
         slug = slug[:-3]
 
-    repo_root = os.path.abspath(args.repo_root)
-    gotchas_dir = os.path.join(repo_root, "rules", "gotchas")
+    if args.repo_root and not os.path.isabs(args.output_dir):
+        gotchas_dir = os.path.abspath(os.path.join(args.repo_root, args.output_dir))
+    else:
+        gotchas_dir = os.path.abspath(args.output_dir)
+
     os.makedirs(gotchas_dir, exist_ok=True)
 
     target_path = os.path.join(gotchas_dir, filename)
